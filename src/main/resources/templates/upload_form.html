@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+  <title>Spring Boot Image Upload example</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+  <div th:replace="fragments/header :: header"></div>
+
+  <div class="container" style="max-width: 500px">
+    <h3 class="mb-3">Spring Boot Image Upload example</h3>
+
+    <form
+      id="uploadForm"
+      method="post"
+      th:action="@{/images/upload}"
+      enctype="multipart/form-data">
+      <input id="input-file" type="file" name="file" accept="image/png, image/jpeg" />
+      <button class="btn btn-sm btn-outline-success float-right" type="submit">
+        Upload
+      </button>
+    </form>
+
+    <div
+      th:if="${message != null}"
+      class="alert alert-secondary alert-dismissible fade show text-center message mt-3"
+      role="alert">
+      [[${message}]]
+      <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+
+  <div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>

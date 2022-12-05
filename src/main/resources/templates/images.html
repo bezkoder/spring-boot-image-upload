@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+  <title>Spring Boot Image Upload example</title>
+
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+  <div th:replace="fragments/header :: header"></div>
+
+  <div class="container-fluid" style="max-width: 600px; margin: 0 auto;">
+    <h2 class="text-center">List of Images</h2>
+
+    <div th:if="${images.size() > 0}">
+      <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Image</th>
+            <th scope="col">File Name</th>
+            <th scope="col">Link</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="image : ${images}">
+            <td><img th:src="@{${image.url}}" alt="${image.name}" height="60px" /></td>
+            <td>[[${image.name}]]</td>
+            <td><a th:href="@{${image.url}}">Download</a></td>
+            <td>
+              <a th:href="@{'/images/delete/' + ${image.name}}" th:fileName="${image.name}" id="btnDelete"
+                title="Delete this image" class="fa-regular fa-trash-can icon-dark btn-delete"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div th:unless="${images.size() > 0}">
+      <span>No files found!</span>
+    </div>
+  </div>
+  
+  <div class="modal fade text-center" id="confirmModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Confirmation</h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+        <div class="modal-body">
+          <span id="confirmText"></span>
+        </div>
+  
+        <div class="modal-footer">
+          <a type="button" id="yesBtn" class="btn btn-danger">Yes</a>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div th:replace="fragments/footer :: footer"></div>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $(".btn-delete").on("click", function (e) {
+        e.preventDefault();
+        link = $(this);
+
+        fileName = link.attr("fileName");
+        $("#yesBtn").attr("href", link.attr("href"));
+        $("#confirmText").html("Do you want to delete the File: \<strong\>" + fileName + "\<\/strong\>?");
+        $("#confirmModal").modal();
+      });
+    });
+  </script>
+
+</body>
+
+</html>
